@@ -1,23 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import Card from "./components/Card";
+import ListGroup from "./components/ListGroup";
+import NavBar from "./components/NavBar";
 
 function App() {
+    let items = [
+        'Apple',
+        'Milk',
+        'Bread',
+        'Egg',
+        'Rice'
+    ];
+    //limit the consol size style={{ maxWidth: '430px', maxHeight: '932px', margin: '0 auto', padding: '20px' }}
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          React
-        </a>
-      </header>
+    <div  style={{ maxWidth: '430px', maxHeight: '932px', margin: '0 auto', padding: '20px' }}>
+      <ListGroup items={items} title="grocery list"/>
+      <NavBar/>
     </div>
   );
 }
