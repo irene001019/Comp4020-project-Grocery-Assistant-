@@ -1,10 +1,11 @@
-function Card(){
+//card-title, card-text, card-icon
+function Card(props){
 return(
-    <div className="card" style={{maxWidth: '430px', maxHeight: '932px', margin: '0 auto', padding: '20px'}}>
+    <div className="card " style={{width:'11rem',height:'11rem'}} >
   <div className="card-body">
-    <h5 className="card-title">Card title</h5>
-    <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-    <a href="#" className="btn btn-primary">Go somewhere</a>
+  <h1 className="card-title">{props.icon}</h1>
+    <h5 className="card-title ">{props.title}</h5>
+    <p className="card-text">{props.text}</p>
   </div>
 </div>
 );
