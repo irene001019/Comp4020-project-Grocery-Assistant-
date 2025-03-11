@@ -24,16 +24,26 @@ function App() {
     
     //limit the consol size style={{ maxWidth: '430px', maxHeight: '932px', margin: '0 auto', padding: '20px' }}
   return (
-    <div  style={{ maxWidth: '430px', maxHeight: '932px', margin: '0 auto', padding: '20px' }}>
-      <div className="container-fluid">
-        <div className="container text-center" >
-          <div className="row justify-content-end">
-            {homePageEle.map((name)=> <div className="col-6 mb-3 mb-sm-5"><Card text = {name[0]} icon = {name[1]}/></div>)}
-          </div>
-        </div>
-      </div>
-      <NavBar/>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<basicLayout />}>
+          <Route index element={<Home />} />
+          <Route path="blogs" element={<Blogs />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="*" element={<NoPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+    // <div  style={{ maxWidth: '430px', maxHeight: '932px', margin: '0 auto', padding: '20px' }}>
+    //   <div className="container-fluid">
+    //     <div className="container text-center" >
+    //       <div className="row justify-content-end">
+    //         {homePageEle.map((name)=> <div className="col-6 mb-3 mb-sm-5"><Card text = {name[0]} icon = {name[1]}/></div>)}
+    //       </div>
+    //     </div>
+    //   </div>
+    //   <NavBar/>
+    // </div>
   );
 }
 
