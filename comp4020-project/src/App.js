@@ -5,35 +5,38 @@ import { RiFileList3Line } from "react-icons/ri";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
 import { RiTimeLine } from "react-icons/ri";
 import { RiSettings4Line } from "react-icons/ri";
-
-
-
-
-
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+//improt pages
+import ExpireList from "./pages/ExpireList";
+import Home from "./pages/Home";
+import Analytics from "./pages/Analytics";
+import ShoppingList from "./pages/ShoppingList";
+import StorageList from "./pages/StorageList";
+import NoPage from "./pages/NoPage";
+import basicLayout from "./Layouts/basicLayout";
 
 function App() {
   //home page icon name
-    let homePageEle = [
-      ['Scanner',<RiBarcodeFill/>],
-      ['Shopping List',<RiFileList3Line/>],
-      ['Budget',<RiMoneyDollarCircleLine/>],
-      ['Expire List', <RiTimeLine/>],
-      ['Settings',<RiSettings4Line/>]
-    ];
+  let homePageEle = [
+    ["Scanner", <RiBarcodeFill />],
+    ["Shopping List", <RiFileList3Line />],
+    ["Budget", <RiMoneyDollarCircleLine />],
+    ["Expire List", <RiTimeLine />],
+    ["Settings", <RiSettings4Line />],
+  ];
 
-    
-    //limit the consol size style={{ maxWidth: '430px', maxHeight: '932px', margin: '0 auto', padding: '20px' }}
+  //limit the consol size style={{ maxWidth: '430px', maxHeight: '932px', margin: '0 auto', padding: '20px' }}
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<basicLayout />}>
-          <Route index element={<Home />} />
-          <Route path="blogs" element={<Blogs />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="*" element={<NoPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<basicLayout />}>
+        <Route index element={<Home />} />
+        <Route path="expireList" element={<ExpireList />} />
+        <Route path="analytics" element={<Analytics />} />
+        <Route path="shoppingList" element={<ShoppingList />} />
+        <Route path="storageList" element={<StorageList />} />
+        <Route path="*" element={<NoPage />} />
+      </Route>
+    </Routes>
     // <div  style={{ maxWidth: '430px', maxHeight: '932px', margin: '0 auto', padding: '20px' }}>
     //   <div className="container-fluid">
     //     <div className="container text-center" >
