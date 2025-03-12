@@ -5,7 +5,7 @@ const ButtonGroup = (props) => {
     const [selectedItem, setSelectedItem] = useState(-1);
 
   return (
-    <div className="container" style={{margin:'1.5rem'}}>
+    <div className="container" style={{marginTop:'10px'}}>
         <div className="row justify-content-center">
         {props.items.map((item, index)=>
         <div className="col-3 mb-sm-3">
