@@ -19,12 +19,12 @@ function NavBar(){
     const [selectedItem, setSelectedItem] = useState(-1);
 
     return(
-        <nav className="nav nav-pills text-center"  style={{position: 'fixed',  bottom: '0', maxWidth: '430px'}}>
+        <nav className="nav nav-pills text-center">
             {menuList.map((item, index) => 
                 <Link to={item[0]}
                 className={selectedItem === index ? 'fs-1 nav-link active' : 'fs-2 nav-link'} 
                 onClick = {()=>{setSelectedItem(index);}}
-                style={{width:'5.3rem'}}>
+                style={{width:'5.5rem'}}>
                     {item[2]}
                     <p className="fs-6">{item[1]}</p>
                 </Link>
