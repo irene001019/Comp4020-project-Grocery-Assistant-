@@ -24,7 +24,7 @@ function NavBar(){
                 <Link to={item[0]}
                 className={selectedItem === index ? 'fs-1 nav-link active' : 'fs-2 nav-link'} 
                 onClick = {()=>{setSelectedItem(index);}}
-                style={{width:'5.3rem'}}>
+                style={{width:'5.1rem'}}>
                     {item[2]}
                     <p className="fs-6">{item[1]}</p>
                 </Link>
