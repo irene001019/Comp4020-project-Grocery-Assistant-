@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 function Card(props){
 return(
   
-    <div className={props.className} style={props.style} >
-      <Link to={props.to} className=" btn card-body">
+    <div className={props.className} style={props.cardStyle} >
+      <Link to={props.to} className=" btn card-body" style={props.bodyStyle}>
         <h1 className="card-title">{props.icon}</h1>
         <p className="card-text">{props.text}</p>
       </Link>

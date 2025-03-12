@@ -4,27 +4,29 @@ import { useState } from "react";
 import { RiBarChartGroupedFill } from "react-icons/ri";//analytics
 import { RiFridgeLine } from "react-icons/ri";//storage
 import { RiHome2Line } from "react-icons/ri";//home
-import { RiNotification2Line } from "react-icons/ri";//notification
-import { RiUser5Line } from "react-icons/ri";
+import { RiFileList3Line } from "react-icons/ri";
+import { RiTimeLine } from "react-icons/ri";
 
 function NavBar(){
     let menuList = [
-    ['/analytics',<RiBarChartGroupedFill/>, 'Analytics'], 
-    ['/storageList',<RiFridgeLine/>,'Storage'],
-    ['/',<RiHome2Line/>,'Home'],
-    ['*',<RiNotification2Line/>,'Notice'], 
-    ['*',<RiUser5Line/>,'Profile']];
+    ['/analytics', 'Analytics',<RiBarChartGroupedFill/>], 
+    ['/storageList','Storage',<RiFridgeLine/>],
+    ['/','Home',<RiHome2Line/>],
+    ['/shoppingList',"Shopping", <RiFileList3Line />],
+    ['/expireList',"Expire", <RiTimeLine />]
+];
 
     const [selectedItem, setSelectedItem] = useState(-1);
 
     return(
-        <nav className="nav nav-pills text-center"  style={{position: 'fixed',  bottom: '0',marginBottom:'25px'}}>
+        <nav className="nav nav-pills text-center"  style={{position: 'fixed',  bottom: '0', maxWidth: '430px'}}>
             {menuList.map((item, index) => 
                 <Link to={item[0]}
                 className={selectedItem === index ? 'fs-1 nav-link active' : 'fs-2 nav-link'} 
-                onClick = {()=>{setSelectedItem(index);}}>
-                    {item[1]}
-                    <p className="h6">{item[2]}</p>
+                onClick = {()=>{setSelectedItem(index);}}
+                style={{width:'5.3rem'}}>
+                    {item[2]}
+                    <p className="fs-6">{item[1]}</p>
                 </Link>
             )}
             
