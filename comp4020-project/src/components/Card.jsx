@@ -1,15 +1,15 @@
-//card-title, card-text, card-icon
+import { Link } from "react-router-dom";
+
+//card-title, card-text, card-icon, card Link
 function Card(props){
 return(
-    <div className="card " style={{width:'11rem',height:'11rem'}} >
-  <div className="card-body">
-  <h1 className="card-title">{props.icon}</h1>
-    <h5 className="card-title ">{props.title}</h5>
-    <p className="card-text">{props.text}</p>
-  </div>
-</div>
+  
+    <div className={props.className} style={props.cardStyle} >
+      <Link to={props.to} className=" btn card-body" style={props.bodyStyle}>
+        <h1 className="card-title">{props.icon}</h1>
+        <p className="card-text">{props.text}</p>
+      </Link>
+    </div>
 );
-
 }
-
 export default Card;

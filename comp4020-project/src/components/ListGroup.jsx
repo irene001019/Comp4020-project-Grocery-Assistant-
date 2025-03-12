@@ -8,7 +8,6 @@ function ListGroup(props){
 
     return (
         <>
-            <h1>{props.title}</h1>
             <ul class="list-group list-group-flush">
                 {props.items.map((item, index) => 
                 <li 
