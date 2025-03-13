@@ -7,6 +7,8 @@ import Analytics from "./pages/Analytics";
 import ShoppingList from "./pages/ShoppingList";
 import StorageList from "./pages/StorageList";
 import NoPage from "./pages/NoPage";
+import SearchComponent from "./components/SearchComponent";
+import EditComponent from "./components/EditComponent";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Route path="expireList" element={<ExpireList />} />
         <Route path="analytics" element={<Analytics />} />
         <Route path="shoppingList" element={<ShoppingList />} />
+        <Route path="search" element={<SearchComponent />} />
+        <Route path="edit" element={<EditComponent />} />
         <Route path="storageList" element={<StorageList />} />
         <Route path="*" element={<NoPage />} />
       </Route>

@@ -1,0 +1,43 @@
+import React, { useState } from 'react';
+import { Form, InputGroup, Button, Card, ListGroup } from 'react-bootstrap';
+import { FaSearch } from 'react-icons/fa';
+
+function SearchComponent() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [items] = useState(['Apple', 'Milk', 'Juice', 'Fish']);
+  
+  const filteredItems = items.filter(item =>
+    item.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <Card style={{ width: 'calc(100% + 40px)', height: '100%',marginTop: '-22px',marginLeft: '-20px',  marginRight: '-20px',border:'none'}}>
+      <Card.Header className="bg-primary text-white " style={{borderRadius: '0px',border:'none'}}>
+        <strong>Search</strong>
+      </Card.Header>
+      
+      <Card.Body >
+        <InputGroup className="mb-3">   
+          <Form.Control
+            placeholder="Search items..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <Button variant="outline-primary" >
+            <FaSearch />
+          </Button>
+        </InputGroup>
+        
+        <ListGroup variant="flush">
+          {filteredItems.map((item, index) => (
+            <ListGroup.Item key={index} className="py-2 border-bottom">
+              {item}
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      </Card.Body>
+    </Card>
+  );
+}
+
+export default SearchComponent;

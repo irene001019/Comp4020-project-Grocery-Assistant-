@@ -3,6 +3,7 @@ import ShoppingListInputGroup from "../components/ShoppingListInputGroup";
 import ButtonGroup from "../components/ButtonGroup";
 import SimpleInputGroup from "../components/SimpleInputGroup";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ShoppingList = () => {
   let simpleInputList = ["Total", "Budget", "Total-Budget"];
@@ -18,6 +19,8 @@ const ShoppingList = () => {
    // Values to display in SimpleInputGroup
    const [calculatedValues, setCalculatedValues] = useState(["0.00", "", ""]);
 
+   const navigate = useNavigate();
+
   // Function to add more input groups
   const addInputGroup = () => {
     setInputGroups([...inputGroups, inputGroups.length + 1]);
@@ -31,11 +34,20 @@ const ShoppingList = () => {
       setCalculatedValues([totalFormatted, budget, diff]);
     }, [prices, budget]);
 
+     // Handle button clicks
+  const handleButtonClick = (index, buttonName) => {
+    if (buttonName === "Search") {
+      navigate('/search'); // Navigate to Search page
+    }else if (buttonName === "Edit") {
+      navigate('/edit'); // Navigate to Edit page
+    }
+  };
+
   return (
     <div className="container text-center">
       
         <h1>Shopping List</h1>
-        <ButtonGroup items={ButtonList} />
+        <ButtonGroup items={ButtonList} onButtonClick={handleButtonClick} />
         
       {/* increace input space scroll-able*/}
       <div className="flex-grow-1 overflow-auto mt-3 " style={{ maxHeight: '40vh' }}>
