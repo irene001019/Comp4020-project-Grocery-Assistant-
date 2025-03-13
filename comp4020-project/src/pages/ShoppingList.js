@@ -2,7 +2,7 @@ import React from "react";
 import ShoppingListInputGroup from "../components/ShoppingListInputGroup";
 import ButtonGroup from "../components/ButtonGroup";
 import SimpleInputGroup from "../components/SimpleInputGroup";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const ShoppingList = () => {
   let simpleInputList = ["Total", "Budget", "Total-Budget"];
@@ -11,10 +11,25 @@ const ShoppingList = () => {
   // Initial input group
   const [inputGroups, setInputGroups] = useState([1]);
 
+   // Track prices and budget
+   const [prices, setPrices] = useState({});
+   const [budget, setBudget] = useState("");
+   
+   // Values to display in SimpleInputGroup
+   const [calculatedValues, setCalculatedValues] = useState(["0.00", "", ""]);
+
   // Function to add more input groups
   const addInputGroup = () => {
     setInputGroups([...inputGroups, inputGroups.length + 1]);
   };
+
+    // Calculate totals whenever prices or budget changes
+    useEffect(() => {
+      const total = Object.values(prices).reduce((sum, price) => sum + (parseFloat(price) || 0), 0);
+      const totalFormatted = total.toFixed(2);
+      const diff = budget ? (parseFloat(budget) - total).toFixed(2) : "";
+      setCalculatedValues([totalFormatted, budget, diff]);
+    }, [prices, budget]);
 
   return (
     <div className="container text-center">
@@ -25,7 +40,10 @@ const ShoppingList = () => {
       {/* increace input space scroll-able*/}
       <div className="flex-grow-1 overflow-auto mt-3 " style={{ maxHeight: '40vh' }}>
         {inputGroups.map((id) => (
-          <ShoppingListInputGroup key={id} />
+          <ShoppingListInputGroup key={id} 
+          onPriceChange={(price) => {
+            setPrices(prev => ({ ...prev, [id]: price }));
+          }} />
         ))}
       </div>
       {/* button for add more input space */}
@@ -35,6 +53,10 @@ const ShoppingList = () => {
       {/* total and budget */}
       <SimpleInputGroup
         items={simpleInputList}
+        values={calculatedValues}
+        onValueChange={(index, value) => {
+          if (index === 1) setBudget(value);
+        }}
         
       />
     </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ShoppingListInputGroup = () => {
+const ShoppingListInputGroup = ({onPriceChange}) => {
   return (
     <>
     <div className="input-group mb-3">
@@ -9,7 +9,7 @@ const ShoppingListInputGroup = () => {
         </div>
             <input type="text" className="form-control" aria-label="Text input with checkbox"/>
             <span className="input-group-text">$</span>
-            <input type="text" className="form-control" aria-label="Dollar amount (with dot and two decimal places)" style={{maxWidth:"5rem"}}/>
+            <input type="text" className="form-control" aria-label="Dollar amount (with dot and two decimal places)" onChange={(e) => onPriceChange(e.target.value)} style={{maxWidth:"5rem"}}/>
     </div> 
     </>
   )
