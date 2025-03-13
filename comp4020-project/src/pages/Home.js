@@ -25,7 +25,7 @@ const Home = () => {
         <div className="row justify-content-end">
             {homePageEle.map((name)=> 
             <div className="col-6 mb-3 mb-sm-3">
-              <Card className="card text-center" to={name[0]} text = {name[1]} icon = {name[2]} cardStyle = {{width:'11rem',height:'10rem'}} bodyStyle={{marginTop:'20%'}}/>
+              <Card className="card text-center" to={name[0]} text = {name[1]} icon = {name[2]} cardStyle = {{width:'11rem',height:'10rem'}} bodyStyle={{height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center'}} />
             </div>
           )}
           </div>        
