@@ -4,6 +4,7 @@ import ButtonGroup from "../components/ButtonGroup";
 import SimpleInputGroup from "../components/SimpleInputGroup";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import SearchComponent from "../components/SearchComponent";
 
 const ShoppingList = () => {
   let simpleInputList = ["Total", "Budget", "Total-Budget"];
@@ -21,6 +22,11 @@ const ShoppingList = () => {
 
    const navigate = useNavigate();
 
+   // Add state for search popup visibility
+   const [showSearchPopup, setShowSearchPopup] = useState(false);
+
+   const [editMode, setEditMode] = useState(false);
+
   // Function to add more input groups
   const addInputGroup = () => {
     setInputGroups([...inputGroups, inputGroups.length + 1]);
@@ -34,29 +40,84 @@ const ShoppingList = () => {
       setCalculatedValues([totalFormatted, budget, diff]);
     }, [prices, budget]);
 
-     // Handle button clicks
+    // Handle button clicks
   const handleButtonClick = (index, buttonName) => {
     if (buttonName === "Search") {
-      navigate('/search'); // Navigate to Search page
+      setShowSearchPopup(!showSearchPopup);
+      setEditMode(false); 
     }else if (buttonName === "Edit") {
-      navigate('/edit'); // Navigate to Edit page
+      setEditMode(!editMode); 
+      setShowSearchPopup(false);
+    }else if (buttonName === "Upload") {
+      setEditMode(false);
+      setShowSearchPopup(false);
     }
   };
+
+
+//function to handle item deletion and reordering
+const deleteInputGroup = (id) => {
+  setInputGroups(prevGroups => prevGroups.filter(groupId => groupId !== id));
+  setPrices(prevPrices => {
+    const newPrices = {...prevPrices};
+    delete newPrices[id];
+    return newPrices;
+  });
+};
+
+const moveInputGroup = (id, direction) => {
+  const currentIndex = inputGroups.indexOf(id);
+  const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+  
+  if (newIndex >= 0 && newIndex < inputGroups.length) {
+    const newInputGroups = [...inputGroups];
+    [newInputGroups[currentIndex], newInputGroups[newIndex]] = 
+    [newInputGroups[newIndex], newInputGroups[currentIndex]];
+    setInputGroups(newInputGroups);
+  }
+};
 
   return (
     <div className="container text-center">
       
         <h1>Shopping List</h1>
-        <ButtonGroup items={ButtonList} onButtonClick={handleButtonClick} />
+      
+
+ 
+  <div >
+  <ButtonGroup items={ButtonList} onButtonClick={handleButtonClick} />
+
+    
+    {showSearchPopup && (
+      <div style={{ 
+        position: 'absolute',
+        
+        zIndex: 1000,
+        marginTop: '12px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+       
+      }}>
+        <SearchComponent />
+      </div>
+    )}
+  </div>
         
       {/* increace input space scroll-able*/}
       <div className="flex-grow-1 overflow-auto mt-3 " style={{ maxHeight: '40vh' }}>
-        {inputGroups.map((id) => (
-          <ShoppingListInputGroup key={id} 
-          onPriceChange={(price) => {
-            setPrices(prev => ({ ...prev, [id]: price }));
-          }} />
-        ))}
+          {inputGroups.map((id) => (
+      <ShoppingListInputGroup 
+        key={id}
+        id={id}
+        editMode={editMode}
+        onDelete={() => deleteInputGroup(id)}
+        onMoveUp={() => moveInputGroup(id, 'up')}
+        onMoveDown={() => moveInputGroup(id, 'down')}
+        onPriceChange={(price) => {
+          setPrices(prev => ({ ...prev, [id]: price }));
+        }} 
+      />
+    ))}
       </div>
       {/* button for add more input space */}
       <button className="btn btn-primary btn-lg " onClick={addInputGroup} style={{marginTop:'10px',marginBottom:'10px'}}>
@@ -68,9 +129,12 @@ const ShoppingList = () => {
         values={calculatedValues}
         onValueChange={(index, value) => {
           if (index === 1) setBudget(value);
-        }}
+        }}/>
+
+     
+     
         
-      />
+
     </div>
   );
 };

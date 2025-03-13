@@ -11,10 +11,8 @@ function SearchComponent() {
   );
 
   return (
-    <Card style={{ width: 'calc(100% + 40px)', height: '100%',marginTop: '-22px',marginLeft: '-20px',  marginRight: '-20px',border:'none'}}>
-      <Card.Header className="bg-primary text-white " style={{borderRadius: '0px',border:'none'}}>
-        <strong>Search</strong>
-      </Card.Header>
+    <Card style={{ width: 'calc(100% + 40px)', height: '100%',marginTop: '-22px',marginLeft: '-20px',  marginRight: '-20px', borderStyle: 'solid', borderWidth: '2px'}}>
+      
       
       <Card.Body >
         <InputGroup className="mb-3">   
