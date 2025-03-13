@@ -1,4 +1,4 @@
-import { Outlet,Link } from "react-router-dom";
+import {Link } from "react-router-dom";
 //icon import
 import { useState } from "react";
 import { RiBarChartGroupedFill } from "react-icons/ri";//analytics

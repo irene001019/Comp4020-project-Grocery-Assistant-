@@ -1,16 +1,20 @@
-import { Link } from "react-router-dom";
-import { Popover } from "bootstrap";
+import React from "react";
 
 //card-title, card-text, card-icon, card Link
 function Card(props){
+   
   return(
   
-    <div className={props.className} style={{width: "8.5rem"}} >
-      <div className="card-body">
+    <div className={props.className} style={props.cardStyle} >
+      <div className="card-body" 
+      style={props.bodyStyle} 
+      aria-describedby={props.popId} 
+      variant={props.popVariant} 
+      onClick={props.popOnClick}>
         <h1 className="card-title">{props.title}</h1>
         <p className="card-text">{props.text}</p>
       </div>
-      
+      {props.additional}
     </div>
 );
 }
