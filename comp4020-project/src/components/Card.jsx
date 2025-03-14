@@ -1,14 +1,20 @@
-import { Link } from "react-router-dom";
+import React from "react";
 
 //card-title, card-text, card-icon, card Link
 function Card(props){
-return(
+   
+  return(
   
     <div className={props.className} style={props.cardStyle} >
-      <Link to={props.to} className=" btn card-body" style={props.bodyStyle}>
-        <h1 className="card-title">{props.icon}</h1>
+      <div className="card-body" 
+      style={props.bodyStyle} 
+      aria-describedby={props.popId} 
+      variant={props.popVariant} 
+      onClick={props.popOnClick}>
+        <h1 className="card-title">{props.title}</h1>
         <p className="card-text">{props.text}</p>
-      </Link>
+      </div>
+      {props.additional}
     </div>
 );
 }

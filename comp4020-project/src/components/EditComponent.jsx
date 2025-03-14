@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ListGroup, Form, Button, InputGroup } from 'react-bootstrap';
 import { FaTrash, FaPen, FaCheck } from 'react-icons/fa';
-import { Card } from 'react-bootstrap';
+
 
 function ShoppingList() {
   const [items, setItems] = useState([
