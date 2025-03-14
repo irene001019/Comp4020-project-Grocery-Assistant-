@@ -2,10 +2,16 @@ import React from 'react'
 import { useState } from 'react';
 
 const ButtonGroup = (props) => {
-    const [selectedItem, setSelectedItem] = useState(-1);
+    const [internalSelectedItem, setInternalSelectedItem] = useState(-1);
+    
+    const selectedItem = props.selectedButton !== undefined ? props.selectedButton : internalSelectedItem;
 
     const handleClick = (index) => {
-      setSelectedItem(index);
+        if (selectedItem === index) {
+          setInternalSelectedItem(-1);
+        } else {
+          setInternalSelectedItem(index);
+        }
       
       if (props.onButtonClick) {
           props.onButtonClick(index, props.items[index]);
@@ -17,7 +23,7 @@ const ButtonGroup = (props) => {
     <div className="container" style={{marginTop:'10px'}}>
         <div className="row justify-content-center">
         {props.items.map((item, index)=>
-        <div className="col-3 mb-sm-3">
+        <div className="col-3 mb-sm-3" key={index}>
         <button type="button" className={selectedItem === index ? 'btn btn-outline-primary active' : 'btn btn-outline-primary'}
             onClick={()=>{handleClick(index);}}>
             {item}
