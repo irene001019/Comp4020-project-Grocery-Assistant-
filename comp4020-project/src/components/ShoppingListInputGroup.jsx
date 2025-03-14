@@ -2,7 +2,7 @@ import React from 'react'
 
 import { FaTrash, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 
-const ShoppingListInputGroup = ({ editMode, onDelete, onMoveUp, onMoveDown, onPriceChange }) => {
+const ShoppingListInputGroup = ({ editMode, onDelete, onMoveUp, onMoveDown, onPriceChange ,onNameChange}) => {
   return (
     <>
     <div className="input-group mb-3">
@@ -35,7 +35,7 @@ const ShoppingListInputGroup = ({ editMode, onDelete, onMoveUp, onMoveDown, onPr
               </div>
             )}
         
-            <input type="text" className="form-control" aria-label="Text input with checkbox"/>
+            <input type="text" className="form-control" aria-label="Text input with checkbox" onChange={(e) => onNameChange(e.target.value)}/>
            
             <span className="input-group-text">$</span>
             <input type="text" className="form-control" aria-label="Dollar amount (with dot and two decimal places)" onChange={(e) => onPriceChange(e.target.value)} style={{maxWidth:"5rem"}}/>

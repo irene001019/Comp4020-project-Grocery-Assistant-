@@ -20,6 +20,8 @@ const ShoppingList = () => {
   // Values to display in SimpleInputGroup
   const [calculatedValues, setCalculatedValues] = useState(["0.00", "", ""]);
 
+  const [itemNames, setItemNames] = useState({});
+
   const navigate = useNavigate();
 
    // Add state for search popup visibility
@@ -29,7 +31,9 @@ const ShoppingList = () => {
 
   // Function to add more input groups
   const addInputGroup = () => {
-    setInputGroups([...inputGroups, inputGroups.length + 1]);
+    const newId = inputGroups.length + 1;
+    setInputGroups([...inputGroups, newId]);
+    setItemNames(prev => ({ ...prev, [newId]: '' }));
   };
 
   // Calculate totals whenever prices or budget changes
@@ -66,6 +70,11 @@ const deleteInputGroup = (id) => {
     delete newPrices[id];
     return newPrices;
   });
+  setItemNames(prev => {
+    const newNames = {...prev};
+    delete newNames[id];
+    return newNames;
+  });
 };
 
 const moveInputGroup = (id, direction) => {
@@ -79,6 +88,16 @@ const moveInputGroup = (id, direction) => {
     setInputGroups(newInputGroups);
   }
 };
+
+// Handle item name changes
+const handleItemNameChange = (id, name) => {
+  setItemNames(prev => ({
+    ...prev,
+    [id]: name
+  }));
+};
+
+
 
   return (
     <div className="container text-center">
@@ -101,7 +120,11 @@ const moveInputGroup = (id, direction) => {
         transform: 'translateX(-50%)',
        
       }}>
-        <SearchComponent />
+        <SearchComponent  items={inputGroups.map(id => ({
+        id,
+        name: itemNames[id] || '',
+        price: prices[id] || ''
+      }))} />
       </div>
     )}
   </div>
@@ -118,7 +141,8 @@ const moveInputGroup = (id, direction) => {
         onMoveDown={() => moveInputGroup(id, 'down')}
         onPriceChange={(price) => {
           setPrices(prev => ({ ...prev, [id]: price }));
-        }} 
+        }}  
+        onNameChange={(name) => handleItemNameChange(id, name)}
       />
     ))}
       </div>
