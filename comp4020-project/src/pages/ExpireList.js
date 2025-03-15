@@ -4,6 +4,7 @@ import ButtonGroup from '../components/ButtonGroup';
 import StorageSearchComponent from '../components/StorageSearchComponent';
 import { FaCircle } from "react-icons/fa";
 import { GiFishbone } from "react-icons/gi";
+import { IoInformationCircle } from "react-icons/io5";
 import {
   Checkbox,  Typography, Popover,
   FormControlLabel, Paper,  Button,
@@ -24,6 +25,9 @@ const ExpireList = () => {
     const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
     const [showSearchPopup, setShowSearchPopup] = useState(false);  
     
+    // Info popover state
+    const [infoAnchorEl, setInfoAnchorEl] = useState(null);
+    const [isHovered, setIsHovered] = useState(false);
    
   const [itemList, setItemList] = useState([
     [<FaCircle className='text-danger'/>, "Milk"],
@@ -104,12 +108,87 @@ const ExpireList = () => {
     }
   };
 
+  const handleInfoClick = (event) => {
+    setInfoAnchorEl(event.currentTarget);
+  };
+
+  const handleInfoClose = () => {
+    setInfoAnchorEl(null);
+  };
+
   return (
     <div>
     <div className='container text-center'>
-       <h1 >Expire List</h1>
+       <h1 style={{ display: 'inline-flex', alignItems: 'center' }}>
+         Expire List
+         <div 
+           className="info-icon-container"
+           style={{
+             marginLeft: '10px',
+             cursor: 'pointer',
+             backgroundColor: isHovered ? '#f0f0f0' : 'transparent',
+             borderRadius: '50%',
+             padding: '5px',
+             display: 'flex',
+             transition: 'background-color 0.2s'
+           }}
+           onMouseEnter={() => setIsHovered(true)}
+           onMouseLeave={() => setIsHovered(false)}
+           onClick={handleInfoClick}
+         >
+           <IoInformationCircle 
+             size={28} 
+             color="#007bff"
+             style={{ 
+               transition: 'transform 0.2s',
+               transform: isHovered ? 'scale(1.4)' : 'scale(1)'
+             }} 
+           />
+         </div>
+       </h1>
        <ButtonGroup items ={ButtonList} onButtonClick={handleButtonClick} selectedButton={selectedButton}/>
     </div>
+
+    {/* Info Popover */}
+    <Popover
+      open={Boolean(infoAnchorEl)}
+      anchorEl={infoAnchorEl}
+      onClose={handleInfoClose}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'center',
+      }}
+      sx={{
+        '& .MuiPopover-paper': {
+          borderRadius: '11px',
+          border: '1px solid #ccc',
+          padding: '10px',
+          maxWidth: '300px',
+          boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+        },
+      }}
+    >
+      <div>
+        <Typography variant="h6" sx={{ mb: 1 }}>Expiration Status</Typography>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+          <FaCircle className='text-danger' style={{ marginRight: '10px' }} />
+          <Typography>Expired!!</Typography>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+          <FaCircle className='text-warning' style={{ marginRight: '10px' }} />
+          <Typography>Will expire within 3 days</Typography>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <FaCircle className='text-success' style={{ marginRight: '10px' }} />
+          <Typography>Will expire within 7 days</Typography>
+        </div>
+      </div>
+    </Popover>
+
      {/* Search Popup */}
      {showSearchPopup && (
           <div style={{ 
@@ -193,16 +272,15 @@ const ExpireList = () => {
                         {item[1]}
                     </div>
                     <div class="col-1" style={{marginRight:"12px"}}>
-                    <button type="button" class="btn btn-light" onClick={()=>deleteItem(selectedItem)}><Delete/></button>
+                    <button type="button" class="btn btn-light" onClick={()=>deleteItem(item)}><Delete/></button>
                     </div>
                     <div class="col-1">
-                    <button type="button" class="btn btn-light" onClick={()=>deleteItem(selectedItem)}><GiFishbone/></button>
+                    <button type="button" class="btn btn-light" onClick={()=>deleteItem(item)}><GiFishbone/></button>
                     </div>
                 </div>
             </div>
-                    </li>
-                )
-                }
+          </li>
+        )}
                     
                 </ul>
 
