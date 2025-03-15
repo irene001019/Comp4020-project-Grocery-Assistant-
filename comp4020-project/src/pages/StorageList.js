@@ -16,20 +16,18 @@ const StorageList = () => {
     console.log('StorageList - savedItems:', savedItems);
     //Add 6 items one that is expired ,one that is expiring within 3 days and 2 that are expiring within 7 days and 2 that are expiring within 14 days like differnt items 
     const defaultItems = [
-      { id: 1, name: 'Banana', checked: true, category: 'Fruit', storageType: 'Fridge', purchaseDate: '2025-03-10', expireDate: '2025-03-20', amount: '3', calories: '52' },
-      { id: 2, name: 'Yogurt', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-12', expireDate: '2025-03-19', amount: '1', calories: '42' },
-      { id: 3, name: 'Pepsi', checked: true, category: 'Beverage', storageType: 'Fridge', purchaseDate: '2025-03-05', expireDate: '2025-03-25', amount: '1', calories: '45' },
-      { id: 4, name: 'Fish', checked: true, category: 'Meat', storageType: 'Freezer', purchaseDate: '2025-03-08', expireDate: '2025-04-08', amount: '2', calories: '206' },
-      { id: 5, name: 'Milk', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-15', expireDate: '2025-03-22', amount: '1', calories: '42' },
-      { id: 6, name: 'Eggs', checked: true, category: 'Dairy', storageType: 'Pantry', purchaseDate: '2025-03-15', expireDate: '2025-03-25', amount: '12', calories: '78' },
-      { id: 7, name: 'Cheese', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-15', expireDate: '2025-03-17', amount: '1', calories: '116' },
-      { id: 8, name: 'Tomato', checked: true, category: 'Vegetable', storageType: 'Fridge', purchaseDate: '2025-03-12', expireDate: '2025-03-13', amount: '1', calories: '18' },
-      { id: 9, name: 'Carrot', checked: true, category: 'Vegetable', storageType: 'Fridge', purchaseDate: '2025-03-12', expireDate: '2025-03-12', amount: '1', calories: '18' },
-      { id: 10, name: 'Potato', checked: true, category: 'Vegetable', storageType: 'Fridge', purchaseDate: '2025-03-15', expireDate: '2025-04-02', amount: '1', calories: '18' },
-      { id: 11, name: 'Beef', checked: true, category: 'Meat', storageType: 'Freezer', purchaseDate: '2025-03-15', expireDate: '2025-03-17', amount: '2', calories: '206' },
-      { id: 14, name: 'Chicken', checked: true, category: 'Meat', storageType: 'Freezer', purchaseDate: '2025-03-15', expireDate: '2025-04-06', amount: '2', calories: '206' },
-
-
+      { id: 1, name: 'Banana', checked: true, category: 'Fruit', storageType: 'Fridge', purchaseDate: '2025-03-10', expireDate: '2025-03-20', price: '$3', amount: '3' },
+      { id: 2, name: 'Yogurt', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-12', expireDate: '2025-03-19', price: '$4', amount: '1' },
+      { id: 3, name: 'Pepsi', checked: true, category: 'Beverage', storageType: 'Fridge', purchaseDate: '2025-03-05', expireDate: '2025-03-25', price: '$2', amount: '1' },
+      { id: 4, name: 'Fish', checked: true, category: 'Meat', storageType: 'Freezer', purchaseDate: '2025-03-08', expireDate: '2025-04-08', price: '$8', amount: '2' },
+      { id: 5, name: 'Milk', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-15', expireDate: '2025-03-22', price: '$5', amount: '1' },
+      { id: 6, name: 'Eggs', checked: true, category: 'Dairy', storageType: 'Pantry', purchaseDate: '2025-03-15', expireDate: '2025-03-25', price: '$4', amount: '12' },
+      { id: 7, name: 'Cheese', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-15', expireDate: '2025-03-17', price: '$7', amount: '1' },
+      { id: 8, name: 'Tomato', checked: true, category: 'Vegetable', storageType: 'Fridge', purchaseDate: '2025-03-12', expireDate: '2025-03-13', price: '$2', amount: '3' },
+      { id: 9, name: 'Carrot', checked: true, category: 'Vegetable', storageType: 'Fridge', purchaseDate: '2025-03-12', expireDate: '2025-03-12', price: '$3', amount: '5' },
+      { id: 10, name: 'Potato', checked: true, category: 'Vegetable', storageType: 'Fridge', purchaseDate: '2025-03-15', expireDate: '2025-04-02', price: '$5', amount: '6' },
+      { id: 11, name: 'Beef', checked: true, category: 'Meat', storageType: 'Freezer', purchaseDate: '2025-03-15', expireDate: '2025-03-17', price: '$12', amount: '2' },
+      { id: 14, name: 'Chicken', checked: true, category: 'Meat', storageType: 'Freezer', purchaseDate: '2025-03-15', expireDate: '2025-04-06', price: '$10', amount: '2' },
     ];
     const result = savedItems ? JSON.parse(savedItems) : defaultItems;
     console.log('StorageList - using items:', result);
@@ -488,11 +486,22 @@ const StorageList = () => {
                     </Box>
                     
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography sx={{ width: '35%', fontWeight: 'bold' }}>Price:</Typography>
+                      <TextField 
+                        size="small" 
+                        value={editedItem.price} 
+                        type="text"
+                        onChange={(e) => handleItemChange('price', e.target.value)}
+                        sx={{ width: '65%' }}
+                      />
+                    </Box>
+                    
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Typography sx={{ width: '35%', fontWeight: 'bold' }}>Amount:</Typography>
                       <TextField 
                         size="small" 
                         value={editedItem.amount} 
-                        type="number"
+                        type="text"
                         onChange={(e) => handleItemChange('amount', e.target.value)}
                         sx={{ width: '65%' }}
                       />
@@ -537,17 +546,6 @@ const StorageList = () => {
                         ))}
                       </TextField>
                     </Box>
-                    
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography sx={{ width: '35%', fontWeight: 'bold' }}>Calories:</Typography>
-                      <TextField 
-                        type="number" 
-                        size="small" 
-                        value={editedItem.calories} 
-                        onChange={(e) => handleItemChange('calories', e.target.value)}
-                        sx={{ width: '65%' }}
-                      />
-                    </Box>
                   </Box>
                 ) : (
                  
@@ -559,16 +557,16 @@ const StorageList = () => {
                     <Typography sx={{ mb: 0.5 }}><strong>Expire Date:</strong> {selectedItem.expireDate}</Typography>
                     <Divider sx={{ my: 1 }} />
                     
-                    <Typography sx={{ mb: 0.5 }}><strong>Amount: $</strong> {selectedItem.amount}</Typography>
+                    <Typography sx={{ mb: 0.5 }}><strong>Price:</strong> {selectedItem.price}</Typography>
+                    <Divider sx={{ my: 1 }} />
+                    
+                    <Typography sx={{ mb: 0.5 }}><strong>Amount:</strong> {selectedItem.amount}</Typography>
                     <Divider sx={{ my: 1 }} />
                     
                     <Typography sx={{ mb: 0.5 }}><strong>Category:</strong> {selectedItem.category}</Typography>
                     <Divider sx={{ my: 1 }} />
                     
                     <Typography sx={{ mb: 0.5 }}><strong>Storage Type:</strong> {selectedItem.storageType}</Typography>
-                    <Divider sx={{ my: 1 }} />
-                    
-                    <Typography sx={{ mb: 0.5 }}><strong>Calories:</strong> {selectedItem.calories} cal</Typography>
                   </>
                 )}
               </Box>

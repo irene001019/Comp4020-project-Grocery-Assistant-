@@ -32,10 +32,10 @@ const ExpireList = () => {
     const savedItems = localStorage.getItem('storageItems');
     console.log('ExpireList - savedItems:', savedItems);
     const defaultItems = [
-      { id: 1, name: 'Banana', checked: true, category: 'Fruit', storageType: 'Fridge', purchaseDate: '2025-03-10', expireDate: '2025-03-20', amount: '3', calories: '52' },
-      { id: 2, name: 'Yogurt', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-12', expireDate: '2025-03-19', amount: '1', calories: '42' },
-      { id: 3, name: 'Pepsi', checked: true, category: 'Beverage', storageType: 'Fridge', purchaseDate: '2025-03-05', expireDate: '2025-03-25', amount: '1', calories: '45' },
-      { id: 4, name: 'Fish', checked: true, category: 'Meat', storageType: 'Freezer', purchaseDate: '2025-03-08', expireDate: '2025-04-08', amount: '2', calories: '206' },
+      { id: 1, name: 'Banana', checked: true, category: 'Fruit', storageType: 'Fridge', purchaseDate: '2025-03-10', expireDate: '2025-03-20', price: '$3', amount: '3' },
+      { id: 2, name: 'Yogurt', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-12', expireDate: '2025-03-19', price: '$4', amount: '1' },
+      { id: 3, name: 'Pepsi', checked: true, category: 'Beverage', storageType: 'Fridge', purchaseDate: '2025-03-05', expireDate: '2025-03-25', price: '$2', amount: '1' },
+      { id: 4, name: 'Fish', checked: true, category: 'Meat', storageType: 'Freezer', purchaseDate: '2025-03-08', expireDate: '2025-04-08', price: '$8', amount: '2' },
     ];
     const result = savedItems ? JSON.parse(savedItems) : defaultItems;
     console.log('ExpireList - using items:', result);

@@ -303,13 +303,13 @@ const ShoppingList = () => {
     // Initialize the item to add with default values
     setItemToAdd({
       name: nextItem.name,
-      price: nextItem.price, // Price will be used as the amount
+      price: nextItem.price, // This will be the price in the storage item
       category: '', // Empty by default to force selection
       storageType: '', // Empty by default to force selection
       purchaseDate: new Date().toISOString().split('T')[0], // Today's date
       expireDate: '', // Empty by default
-      calories: '', // Empty by default to force input
-      checked: true
+      amount: '', 
+      checked: false
     });
     
     setShowModal(true);
@@ -395,11 +395,12 @@ const ShoppingList = () => {
     const requiredFields = [
       { field: 'name', label: 'Item Name' },
       { field: 'price', label: 'Price' },
+      { field: 'amount', label: 'Amount/Quantity' },
       { field: 'category', label: 'Category' },
       { field: 'storageType', label: 'Storage Type' },
       { field: 'purchaseDate', label: 'Purchase Date' },
-      { field: 'expireDate', label: 'Expiration Date' },
-      { field: 'calories', label: 'Calories' }
+      { field: 'expireDate', label: 'Expiration Date' }
+     
     ];
     
     // Clear all previous errors
@@ -452,7 +453,8 @@ const ShoppingList = () => {
     const storageItem = {
       ...newItem,
       id: storageItemId,
-      amount: newItem.price // Use price as amount for storage item
+      price: newItem.price,
+      amount: newItem.amount 
     };
     
     const updatedStorageItems = [...storageItems, storageItem];
@@ -657,7 +659,7 @@ const ShoppingList = () => {
                   </div>
                   
                   <div className="mb-3">
-                    <label htmlFor="itemPrice" className="form-label">Price/Amount</label>
+                    <label htmlFor="itemPrice" className="form-label">Price</label>
                     <div className="input-group has-validation">
                       <span className="input-group-text">$</span>
                       <input 
@@ -671,6 +673,19 @@ const ShoppingList = () => {
                       {formErrors.price && <div className="invalid-feedback">{formErrors.price}</div>}
                     </div>
                   </div>
+
+                  <div className="mb-3">
+                    <label htmlFor="itemAmount" className="form-label">Amount/Quantity of item</label>
+                    <input 
+                      type="text" 
+                      className={`form-control ${formErrors.amount ? 'is-invalid' : ''}`}
+                      id="itemAmount" 
+                      value={itemToAdd.amount}
+                      onChange={(e) => handleItemChange('amount', e.target.value)}
+                      placeholder="Enter amount/quantity"
+                    />
+                    {formErrors.amount && <div className="invalid-feedback">{formErrors.amount}</div>}
+                  </div>  
                   
                   <div className="mb-3">
                     <label htmlFor="itemCategory" className="form-label">Category</label>
@@ -733,18 +748,7 @@ const ShoppingList = () => {
                     {formErrors.expireDate && <div className="invalid-feedback">{formErrors.expireDate}</div>}
                   </div>
                   
-                  <div className="mb-3">
-                    <label htmlFor="itemCalories" className="form-label">Calories</label>
-                    <input 
-                      type="number" 
-                      className={`form-control ${formErrors.calories ? 'is-invalid' : ''}`}
-                      id="itemCalories" 
-                      value={itemToAdd.calories}
-                      onChange={(e) => handleItemChange('calories', e.target.value)}
-                      placeholder="Enter calories"
-                    />
-                    {formErrors.calories && <div className="invalid-feedback">{formErrors.calories}</div>}
-                  </div>
+                  
                 </form>
               </div>
               
