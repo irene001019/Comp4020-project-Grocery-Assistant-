@@ -1,7 +1,6 @@
-import React from 'react'
-import { useState } from 'react';
+import React, { useState, forwardRef } from 'react'
 
-const ButtonGroup = (props) => {
+const ButtonGroup = forwardRef((props, ref) => {
     const [internalSelectedItem, setInternalSelectedItem] = useState(-1);
     
     const selectedItem = props.selectedButton !== undefined ? props.selectedButton : internalSelectedItem;
@@ -21,7 +20,7 @@ const ButtonGroup = (props) => {
 
   return (
     <div className="container" style={{marginTop:'10px'}}>
-        <div className="row justify-content-center">
+        <div className="row justify-content-center" ref={ref}>
         {props.items.map((item, index)=>
         <div className="col-3 mb-sm-3" key={index}>
         <button type="button" className={selectedItem === index ? 'btn btn-outline-primary active' : 'btn btn-outline-primary'}
@@ -33,6 +32,6 @@ const ButtonGroup = (props) => {
           </div>
         </div>
   )
-};
+});
 
 export default ButtonGroup

@@ -1,5 +1,4 @@
-import React from 'react'
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ButtonGroup from '../components/ButtonGroup';
 import StorageSearchComponent from '../components/StorageSearchComponent';
 import { FaCircle } from "react-icons/fa";
@@ -8,7 +7,7 @@ import { IoInformationCircle } from "react-icons/io5";
 import {
   Checkbox,  Typography, Popover,
   FormControlLabel, Paper,  Button,
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
 } from '@mui/material';
 import { Delete} from '@mui/icons-material';
 
@@ -21,30 +20,104 @@ const ExpireList = () => {
     const [filterAnchorEl, setFilterAnchorEl] = useState(null); 
     const [filterCategory, setFilterCategory] = useState([]); 
     const [filterStorageType, setFilterStorageType] = useState([]); 
+    const [sortDirection, setSortDirection] = useState('asc');
   
     const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
     const [showSearchPopup, setShowSearchPopup] = useState(false);  
     
-    // Info popover state
     const [infoAnchorEl, setInfoAnchorEl] = useState(null);
     const [isHovered, setIsHovered] = useState(false);
    
-  const [itemList, setItemList] = useState([
-    [<FaCircle className='text-danger'/>, "Milk"],
-    [<FaCircle className='text-danger'/>, "Cabbage"],
-    [<FaCircle className='text-danger'/>, "Strawberries"],
-    [<FaCircle className='text-warning'/>, "Fish"],
-    [<FaCircle className='text-warning'/>, "Cheese"],
-    [<FaCircle className='text-warning'/>, "Yogurt"],
-    [<FaCircle className='text-warning'/>, "Bread"],
-    [<FaCircle className='text-success'/>, "Chicken Thigh"],
-    [<FaCircle className="text-success"/>, "Carrots"],
-    [<FaCircle className="text-success"/>, "Apples"]
+  const [items, setItems] = useState(() => {
+    const savedItems = localStorage.getItem('storageItems');
+    console.log('ExpireList - savedItems:', savedItems);
+    const defaultItems = [
+      { id: 1, name: 'Banana', checked: true, category: 'Fruit', storageType: 'Fridge', purchaseDate: '2025-03-10', expireDate: '2025-03-20', amount: '3', calories: '52' },
+      { id: 2, name: 'Yogurt', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-12', expireDate: '2025-03-19', amount: '1', calories: '42' },
+      { id: 3, name: 'Pepsi', checked: true, category: 'Beverage', storageType: 'Fridge', purchaseDate: '2025-03-05', expireDate: '2025-03-25', amount: '1', calories: '45' },
+      { id: 4, name: 'Fish', checked: true, category: 'Meat', storageType: 'Freezer', purchaseDate: '2025-03-08', expireDate: '2025-04-08', amount: '2', calories: '206' },
+    ];
+    const result = savedItems ? JSON.parse(savedItems) : defaultItems;
+    console.log('ExpireList - using items:', result);
+    return result;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('storageItems', JSON.stringify(items));
+  }, [items]);
+
+  const [wasteItems, setWasteItems] = useState(() => {
+    const savedWasteItems = localStorage.getItem('wasteItems');
+    return savedWasteItems ? JSON.parse(savedWasteItems) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('wasteItems', JSON.stringify(wasteItems));
+  }, [wasteItems]);
+
+  const getExpirationClass = (expireDate) => {
+    const currentDate = new Date();
+    const expiryDate = new Date(expireDate);
+    
+    const timeDiff = expiryDate - currentDate;
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+    
+    if (daysDiff < 0) {
+      return 'text-danger';
+    } else if (daysDiff <= 3) {
+      return 'text-warning';
+    } else if (daysDiff <= 7) {
+      return 'text-primary'; 
+    } else {
+      return 'text-success'; 
+    }
+  };
+
+  const getExpirationText = (expireDate) => {
+    const currentDate = new Date();
+    const expiryDate = new Date(expireDate);
+    
+    const timeDiff = expiryDate - currentDate;
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+    
+    if (daysDiff < 0) {
+      return `Expired ${Math.abs(daysDiff)} days ago`;
+    } else if (daysDiff === 0) {
+      return 'Expires today';
+    } else if (daysDiff === 1) {
+      return 'Expires tomorrow';
+    } else {
+      return `Will expire in ${daysDiff} days`;
+    }
+  };
+
+  const filteredItems = items.filter(item => {
+    const categoryCondition = filterCategory.length === 0 || filterCategory.includes(item.category);
+    const storageCondition = filterStorageType.length === 0 || filterStorageType.includes(item.storageType);
+    
+    return categoryCondition && storageCondition;
+  }).sort((a, b) => {
+    const currentDate = new Date();
+    const expireDateA = new Date(a.expireDate);
+    const expireDateB = new Date(b.expireDate);
+    
+    const daysUntilExpirationA = Math.ceil((expireDateA - currentDate) / (1000 * 60 * 60 * 24));
+    const daysUntilExpirationB = Math.ceil((expireDateB - currentDate) / (1000 * 60 * 60 * 24));
+    
+    return sortDirection === 'asc' 
+      ? daysUntilExpirationA - daysUntilExpirationB 
+      : daysUntilExpirationB - daysUntilExpirationA;
+  });
+  const itemList = filteredItems.map(item => [
+    <FaCircle className={getExpirationClass(item.expireDate)} />, 
+    item.name,
+    item
   ]);
 
   let ButtonList =[
     "Filter",
-    "Search"
+    "Search",
+    "Sort"
   ];
 
   const allCategories = ["Fruit", "Vegetable", "Meat", "Dairy", "Beverage", "Baking", "Frozen"];
@@ -54,14 +127,17 @@ const ExpireList = () => {
 
   const handleButtonClick = (index, buttonName) => {    
     if (buttonName === 'Filter') {
-      const filterButton = buttonContainerRef.current.querySelector('button:nth-child(1)');
+      const filterButton = buttonContainerRef.current.querySelector(`.col-3:nth-child(${index + 1}) button`);
       setFilterAnchorEl(filterButton);
       setSelectedButton(index); 
       setShowSearchPopup(false);
-    }  else if (buttonName === 'Search') {
+    } else if (buttonName === 'Search') {
       setShowSearchPopup(!showSearchPopup);
       setFilterAnchorEl(null);
       setSelectedButton(showSearchPopup ? -1 : index);
+    } else if (buttonName === 'Sort') {
+      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+      setSelectedButton(index);
     }
   };
   const handleSearchItemClick = (item) => {
@@ -77,12 +153,17 @@ const ExpireList = () => {
 
   const confirmDelete = () => {
     if (deleteAction === 'checked') {
-      setItemList(itemList.filter(item => !item.checked));
+      setItems(items.filter(item => !item.checked));
     } else if (deleteAction === 'single' && selectedItem) {
-      setItemList(itemList.filter(i => i !== selectedItem));
+      const itemToDelete = selectedItem[2];
+      setItems(items.filter(i => i.id !== itemToDelete.id));
+    } else if (deleteAction === 'waste' && selectedItem) {
+      const itemToWaste = selectedItem[2];
+      setWasteItems([...wasteItems, itemToWaste]);
+      setItems(items.filter(i => i.id !== itemToWaste.id));
     } else if (deleteAction === 'save') {
-      setItemList(itemList.map(item => 
-        item.index === editedItem.index ? editedItem : item
+      setItems(items.map(item => 
+        item.id === editedItem.id ? editedItem : item
       ));
       setSelectedItem(editedItem);
     }
@@ -91,10 +172,13 @@ const ExpireList = () => {
 
   const deleteItem = (item) => {
     setSelectedItem(item);
-    // setItemList(itemList.filter((_, i) => i !== index)); // Remove item at index
     handleDeleteConfirm('single');
   };
- ;
+
+  const moveToWaste = (item) => {
+    setSelectedItem(item);
+    handleDeleteConfirm('waste');
+  };
  
   const toggleFilter = (type, value) => {
     if (type === 'category') {
@@ -146,7 +230,7 @@ const ExpireList = () => {
            />
          </div>
        </h1>
-       <ButtonGroup items ={ButtonList} onButtonClick={handleButtonClick} selectedButton={selectedButton}/>
+       <ButtonGroup ref={buttonContainerRef} items ={ButtonList} onButtonClick={handleButtonClick} selectedButton={selectedButton}/>
     </div>
 
     {/* Info Popover */}
@@ -182,9 +266,13 @@ const ExpireList = () => {
           <FaCircle className='text-warning' style={{ marginRight: '10px' }} />
           <Typography>Will expire within 3 days</Typography>
         </div>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+          <FaCircle className='text-primary' style={{ marginRight: '10px' }} />
+          <Typography>Will expire within 7 days</Typography>
+        </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <FaCircle className='text-success' style={{ marginRight: '10px' }} />
-          <Typography>Will expire within 7 days</Typography>
+          <Typography>Will expire in more than 7 days</Typography>
         </div>
       </div>
     </Popover>
@@ -199,7 +287,14 @@ const ExpireList = () => {
             transform: 'translateX(-50%)',
           }}>
             <StorageSearchComponent 
-              items={itemList} 
+              items={items.map(item => ({
+                ...item,
+                element: [
+                  <FaCircle className={getExpirationClass(item.expireDate)} />,
+                  item.name,
+                  item
+                ]
+              }))}
               onItemClick={handleSearchItemClick} 
             />
           </div>
@@ -262,20 +357,63 @@ const ExpireList = () => {
               {/* Item List */}
     <ul class="list-group list-group-flush ">
         {itemList.map((item, index) => 
-          <li className='list-group-item list-group-item-action' >
+          <li className='list-group-item list-group-item-action' 
+              title={getExpirationText(item[2].expireDate)}
+              style={{ 
+                position: 'relative',
+                transition: 'background-color 0.2s ease-in-out'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e8e8e8'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
+          >
             <div class="container text-left">
               <div class="row">
                     <div class="col-1">
                         {item[0]}
                     </div>
                     <div class="col-8">
-                        {item[1]}
+                        <div>{item[1]}</div>
+                        <div style={{ fontSize: '0.8em', color: '#666' }}>
+                          {getExpirationText(item[2].expireDate)}
+                        </div>
                     </div>
                     <div class="col-1" style={{marginRight:"12px"}}>
-                    <button type="button" class="btn btn-light" onClick={()=>deleteItem(item)}><Delete/></button>
+                      <button 
+                        type="button" 
+                        style={{
+                          borderRadius: '50%',
+                          width: '40px',
+                          height: '40px',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          backgroundColor: '#ffebee',
+                          border: '1px solid #ff5252',
+                          color: '#ff5252'
+                        }} 
+                        onClick={()=>deleteItem(item)}
+                      >
+                        <Delete/>
+                      </button>
                     </div>
                     <div class="col-1">
-                    <button type="button" class="btn btn-light" onClick={()=>deleteItem(item)}><GiFishbone/></button>
+                      <button 
+                        type="button" 
+                        style={{
+                          borderRadius: '50%',
+                          width: '40px',
+                          height: '40px',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          backgroundColor: '#fff8e1',
+                          border: '1px solid #ffa000',
+                          color: '#ffa000'
+                        }} 
+                        onClick={()=>moveToWaste(item)}
+                      >
+                        <GiFishbone/>
+                      </button>
                     </div>
                 </div>
             </div>
