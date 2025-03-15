@@ -7,27 +7,26 @@ import {
   FormControlLabel, Box, Divider, Paper, TextField, Button,
   Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
 } from '@mui/material';
-import { Delete, ChevronRight, Close, Edit, ArrowBack, Save, ArrowUpward, ArrowDownward } from '@mui/icons-material';
+import { Delete, ChevronRight, Edit, ArrowBack, Save, ArrowUpward, ArrowDownward } from '@mui/icons-material';
 import { GiFishbone } from "react-icons/gi";
 
 const StorageList = () => {
   const [items, setItems] = useState(() => {
-    const savedItems = localStorage.getItem('groceryItems');
-    return savedItems ? JSON.parse(savedItems) : [
-      { id: 1, name: 'Apple', checked: true, category: 'Fruit', storageType: 'Fridge', purchaseDate: '2025-03-10', expireDate: '2025-03-20', amount: '5', calories: '52' },
-      { id: 2, name: 'Chicken thigh', checked: true, category: 'Meat', storageType: 'Freezer', purchaseDate: '2025-03-08', expireDate: '2025-04-08', amount: '2', calories: '209' },
-      { id: 3, name: 'Milk', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-12', expireDate: '2025-03-19', amount: '1', calories: '42' },
-      { id: 4, name: 'Juice', checked: true, category: 'Beverage', storageType: 'Fridge', purchaseDate: '2025-03-05', expireDate: '2025-03-25', amount: '1', calories: '45' },
-      { id: 5, name: 'Cheese', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-01', expireDate: '2025-04-01', amount: '1', calories: '402' },
-      { id: 6, name: 'Beet', checked: true, category: 'Vegetable', storageType: 'Fridge', purchaseDate: '2025-03-11', expireDate: '2025-03-18', amount: '3', calories: '43' },
-      { id: 7, name: 'Flour', checked: true, category: 'Baking', storageType: 'Pantry', purchaseDate: '2025-02-15', expireDate: '2025-08-15', amount: '1', calories: '364' },
-      { id: 8, name: 'Egg', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-09', expireDate: '2025-03-23', amount: '12', calories: '155' },
-      { id: 9, name: 'Frozen pizza', checked: true, category: 'Frozen', storageType: 'Freezer', purchaseDate: '2025-03-01', expireDate: '2025-06-01', amount: '1', calories: '266' },
+    const savedItems = localStorage.getItem('storageItems');
+    console.log('StorageList - savedItems:', savedItems);
+    const defaultItems = [
+      { id: 1, name: 'Banana', checked: true, category: 'Fruit', storageType: 'Fridge', purchaseDate: '2025-03-10', expireDate: '2025-03-20', amount: '3', calories: '52' },
+      { id: 2, name: 'Yogurt', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-12', expireDate: '2025-03-19', amount: '1', calories: '42' },
+      { id: 3, name: 'Pepsi', checked: true, category: 'Beverage', storageType: 'Fridge', purchaseDate: '2025-03-05', expireDate: '2025-03-25', amount: '1', calories: '45' },
+      { id: 4, name: 'Fish', checked: true, category: 'Meat', storageType: 'Freezer', purchaseDate: '2025-03-08', expireDate: '2025-04-08', amount: '2', calories: '206' },
     ];
+    const result = savedItems ? JSON.parse(savedItems) : defaultItems;
+    console.log('StorageList - using items:', result);
+    return result;
   });
 
   useEffect(() => {
-    localStorage.setItem('groceryItems', JSON.stringify(items));
+    localStorage.setItem('storageItems', JSON.stringify(items));
   }, [items]);
 
   const [selectedButton, setSelectedButton] = useState(-1); 
