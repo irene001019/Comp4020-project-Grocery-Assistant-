@@ -3,7 +3,6 @@ import ShoppingListInputGroup from "../components/ShoppingListInputGroup";
 import ButtonGroup from "../components/ButtonGroup";
 import SimpleInputGroup from "../components/SimpleInputGroup";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import SearchComponent from "../components/SearchComponent";
 
 const ShoppingList = () => {
@@ -22,7 +21,6 @@ const ShoppingList = () => {
 
   const [itemNames, setItemNames] = useState({});
 
-  const navigate = useNavigate();
 
    // Add state for search popup visibility
    const [showSearchPopup, setShowSearchPopup] = useState(false);
