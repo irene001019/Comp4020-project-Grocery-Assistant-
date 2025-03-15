@@ -55,6 +55,8 @@ const ExpireList = () => {
     localStorage.setItem('wasteItems', JSON.stringify(wasteItems));
   }, [wasteItems]);
 
+ 
+
   const getExpirationClass = (expireDate) => {
     const currentDate = new Date();
     const expiryDate = new Date(expireDate);
