@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaTrash, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 
-const ShoppingListInputGroup = ({editMode, onDelete, onMoveUp, onMoveDown, onPriceChange, onNameChange, initialName = '', initialPrice = '', isChecked = false, onCheckboxChange }) => {
+const ShoppingListInputGroup = ({ id, editMode, onDelete, onMoveUp, onMoveDown, onPriceChange, onNameChange, initialName = '', initialPrice = '', isChecked = false, onCheckboxChange }) => {
   const [name, setName] = useState(initialName);
   const [price, setPrice] = useState(initialPrice);
   const [checked, setChecked] = useState(isChecked);

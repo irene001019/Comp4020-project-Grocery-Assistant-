@@ -9,7 +9,9 @@ const basicLayout = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh",      
+        height: "100vh",
+        
+        
       }}
     >
       <div
@@ -32,7 +34,8 @@ const basicLayout = () => {
             flex: 1,
             overflow: "auto",
             padding: "20px",
-            scrollbarWidth: "none",     
+            scrollbarWidth: "none",
+         
           }}
         >
           <Outlet />
