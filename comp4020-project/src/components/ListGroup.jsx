@@ -1,20 +1,31 @@
-import { useState } from "react";
 import React from 'react'; 
 
 //{input: items[], title}
 
 function ListGroup(props){
-    const [selectedItem, setSelectedItem] = useState(-1);
-
+   
+     // Delete an item from the list
+ 
     return (
         <>
-            <ul class="list-group list-group-flush">
-                {props.items.map((item, index) => 
+            <ul class="list-group list-group-flush ">
+                {props.items.map((item) => 
                 <li 
-                className={selectedItem === index ? 'list-group-item list-group-item-action active' : 'list-group-item list-group-item-action'} 
-                onClick={() => { setSelectedItem(index); }}>
-                    {item}
-                </li>)}
+                    className='list-group-item list-group-item-action' >
+                    <div class="container text-left">
+            <div class="row">
+                <div class="col-1">
+                    {item[0]}
+                </div>
+                <div class="col-8">
+                    {item[1]}
+                </div>
+               
+            </div>
+        </div>
+                </li>
+            )}
+                
             </ul>
         </>
     );
