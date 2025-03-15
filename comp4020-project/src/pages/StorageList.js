@@ -1,26 +1,34 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ButtonGroup from '../components/ButtonGroup';
 import StorageSearchComponent from '../components/StorageSearchComponent';
 import {
   List, ListItem, ListItemIcon, ListItemText, 
   Checkbox, IconButton, Typography, Popover,
-  FormControlLabel, Box, Divider, Paper, TextField, Button
+  FormControlLabel, Box, Divider, Paper, TextField, Button,
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
 } from '@mui/material';
-import { Delete, ChevronRight, Close, Edit ,ArrowBack,Save,Cancel} from '@mui/icons-material';
+import { Delete, ChevronRight, Close, Edit, ArrowBack, Save, ArrowUpward, ArrowDownward } from '@mui/icons-material';
 import { GiFishbone } from "react-icons/gi";
 
 const StorageList = () => {
-  const [items, setItems] = useState([
-    { id: 1, name: 'Apple', checked: true, category: 'Fruit', storageType: 'Fridge', purchaseDate: '2025-03-10', expireDate: '2025-03-20', amount: '5', calories: '52' },
-    { id: 2, name: 'Chicken thigh', checked: true, category: 'Meat', storageType: 'Freezer', purchaseDate: '2025-03-08', expireDate: '2025-04-08', amount: '2', calories: '209' },
-    { id: 3, name: 'Milk', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-12', expireDate: '2025-03-19', amount: '1', calories: '42' },
-    { id: 4, name: 'Juice', checked: true, category: 'Beverage', storageType: 'Fridge', purchaseDate: '2025-03-05', expireDate: '2025-03-25', amount: '1', calories: '45' },
-    { id: 5, name: 'Cheese', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-01', expireDate: '2025-04-01', amount: '1', calories: '402' },
-    { id: 6, name: 'Beet', checked: true, category: 'Vegetable', storageType: 'Fridge', purchaseDate: '2025-03-11', expireDate: '2025-03-18', amount: '3', calories: '43' },
-    { id: 7, name: 'Flour', checked: true, category: 'Baking', storageType: 'Pantry', purchaseDate: '2025-02-15', expireDate: '2025-08-15', amount: '1', calories: '364' },
-    { id: 8, name: 'Egg', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-09', expireDate: '2025-03-23', amount: '12', calories: '155' },
-    { id: 9, name: 'Frozen pizza', checked: true, category: 'Frozen', storageType: 'Freezer', purchaseDate: '2025-03-01', expireDate: '2025-06-01', amount: '1', calories: '266' },
-  ]);
+  const [items, setItems] = useState(() => {
+    const savedItems = localStorage.getItem('groceryItems');
+    return savedItems ? JSON.parse(savedItems) : [
+      { id: 1, name: 'Apple', checked: true, category: 'Fruit', storageType: 'Fridge', purchaseDate: '2025-03-10', expireDate: '2025-03-20', amount: '5', calories: '52' },
+      { id: 2, name: 'Chicken thigh', checked: true, category: 'Meat', storageType: 'Freezer', purchaseDate: '2025-03-08', expireDate: '2025-04-08', amount: '2', calories: '209' },
+      { id: 3, name: 'Milk', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-12', expireDate: '2025-03-19', amount: '1', calories: '42' },
+      { id: 4, name: 'Juice', checked: true, category: 'Beverage', storageType: 'Fridge', purchaseDate: '2025-03-05', expireDate: '2025-03-25', amount: '1', calories: '45' },
+      { id: 5, name: 'Cheese', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-01', expireDate: '2025-04-01', amount: '1', calories: '402' },
+      { id: 6, name: 'Beet', checked: true, category: 'Vegetable', storageType: 'Fridge', purchaseDate: '2025-03-11', expireDate: '2025-03-18', amount: '3', calories: '43' },
+      { id: 7, name: 'Flour', checked: true, category: 'Baking', storageType: 'Pantry', purchaseDate: '2025-02-15', expireDate: '2025-08-15', amount: '1', calories: '364' },
+      { id: 8, name: 'Egg', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-09', expireDate: '2025-03-23', amount: '12', calories: '155' },
+      { id: 9, name: 'Frozen pizza', checked: true, category: 'Frozen', storageType: 'Freezer', purchaseDate: '2025-03-01', expireDate: '2025-06-01', amount: '1', calories: '266' },
+    ];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('groceryItems', JSON.stringify(items));
+  }, [items]);
 
   const [selectedButton, setSelectedButton] = useState(-1); 
 
@@ -37,15 +45,24 @@ const StorageList = () => {
   
   const [showSearchPopup, setShowSearchPopup] = useState(false);  
   
-  const [wasteItems, setWasteItems] = useState([]); 
-  
+  const [wasteItems, setWasteItems] = useState(() => {
+    const savedWasteItems = localStorage.getItem('wasteItems');
+    return savedWasteItems ? JSON.parse(savedWasteItems) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('wasteItems', JSON.stringify(wasteItems));
+  }, [wasteItems]);
+
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [deleteAction, setDeleteAction] = useState(null);
+
   const buttonContainerRef = useRef(null);
 
   const ButtonList = ["Filter", "Search", "Edit"];
 
   const allCategories = ["Fruit", "Vegetable", "Meat", "Dairy", "Beverage", "Baking", "Frozen"];
   const allStorageTypes = ["Fridge", "Freezer", "Pantry"];
-
 
 
   const handleButtonClick = (index, buttonName) => {    
@@ -95,14 +112,43 @@ const StorageList = () => {
     setEditedItem({...item});
   };
 
-  const deleteItem  = (item) => {
-    setItems(items.filter(i => i.id !== item.id));
-    setDetailsAnchorEl(null);
+  const handleDeleteConfirm = (action) => {
+    setDeleteAction(action);
+    setConfirmDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (deleteAction === 'checked') {
+      setItems(items.filter(item => !item.checked));
+    } else if (deleteAction === 'single' && selectedItem) {
+      setItems(items.filter(i => i.id !== selectedItem.id));
+      setDetailsAnchorEl(null);
+    } else if (deleteAction === 'waste' && selectedItem) {
+      setWasteItems([...wasteItems, selectedItem]);
+      setItems(items.filter(i => i.id !== selectedItem.id));
+      setDetailsAnchorEl(null);
+    } else if (deleteAction === 'save') {
+      setItems(items.map(item => 
+        item.id === editedItem.id ? editedItem : item
+      ));
+      setSelectedItem(editedItem);
+      setItemEditMode(false);
+    }
+    setConfirmDialogOpen(false);
+  };
+
+  const deleteItem = (item) => {
+    setSelectedItem(item);
+    handleDeleteConfirm('single');
+  };
+
+  const deleteCheckedItems = () => {
+    handleDeleteConfirm('checked');
   };
 
   const moveToWaste = (item) => {
-    setWasteItems([...wasteItems, item]);
-    deleteItem(item);
+    setSelectedItem(item);
+    handleDeleteConfirm('waste');
   };
 
   const toggleItemEditMode = () => {
@@ -113,11 +159,13 @@ const StorageList = () => {
   };
 
   const saveEditedItem = () => {
-    setItems(items.map(item => 
-      item.id === editedItem.id ? editedItem : item
-    ));
-    setSelectedItem(editedItem);
-    setItemEditMode(false);
+    const hasChanges = JSON.stringify(selectedItem) !== JSON.stringify(editedItem);
+    
+    if (hasChanges) {
+      handleDeleteConfirm('save');
+    } else {
+      setItemEditMode(false);
+    }
   };
 
   const getFilteredItems = () => {
@@ -150,10 +198,26 @@ const StorageList = () => {
       [name]: value
     }));
   };
-  
 
-  const deleteCheckedItems = () => {
-    setItems(items.filter(item => !item.checked));
+  const moveItem = (id, direction) => {
+    const itemIndex = items.findIndex(item => item.id === id);
+    if ((direction === 'up' && itemIndex === 0) || 
+        (direction === 'down' && itemIndex === items.length - 1)) {
+      return;
+    }
+    
+    const newItems = [...items];
+    const targetIndex = direction === 'up' ? itemIndex - 1 : itemIndex + 1;
+    
+    [newItems[itemIndex], newItems[targetIndex]] = [newItems[targetIndex], newItems[itemIndex]];
+    setItems(newItems);
+  };
+
+  const editItemFromList = (item) => {
+    setSelectedItem(item);
+    setEditedItem({...item});
+    setDetailsAnchorEl(document.getElementById(`item-${item.id}`));
+    setItemEditMode(true);
   };
 
   return (
@@ -245,30 +309,41 @@ const StorageList = () => {
       {/* Items List */}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1 }}>
         <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Items</Typography>
-        <Button 
-          variant="contained" 
-          color="primary" 
-          onClick={deleteCheckedItems}
-          sx={{ fontSize: '0.8rem', py: 0.5 }}
-        >
-          Done
-        </Button>
+        {!editMode && (
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={deleteCheckedItems}
+            sx={{ fontSize: '0.8rem', py: 0.5 }}
+          >
+            Done
+          </Button>
+        )}
       </Box>
       <List sx={{ flexGrow: 1, overflow: 'auto' }}>
         {getFilteredItems().map((item) => (
           <React.Fragment key={item.id}>
             <ListItem 
+              id={`item-${item.id}`}
               secondaryAction={
                 editMode ? (
-                  <IconButton 
-                    edge="end" 
-                    color="error"
-                    onClick={(e) => {
-                      deleteItem(item);
-                    }}
-                  >
-                    <Delete />
-                  </IconButton>
+                  <Box sx={{ display: 'flex' }}>
+                    <IconButton 
+                      edge="end"
+                      color="primary"
+                      onClick={() => editItemFromList(item)}
+                      sx={{ mr: 0.5 }}
+                    >
+                      <Edit fontSize="small" />
+                    </IconButton>
+                    <IconButton 
+                      edge="end" 
+                      color="error"
+                      onClick={() => deleteItem(item)}
+                    >
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  </Box>
                 ) : (
                   <IconButton onClick={(e) => showDetails(item, e)}>
                     <ChevronRight color="action" />
@@ -276,14 +351,32 @@ const StorageList = () => {
                 )
               }
             >
-              
-              <ListItemIcon>
-                <Checkbox
-                  edge="start"
-                  checked={item.checked}
-                  onChange={() => toggleItemCheck(item.id)}
-                />
-              </ListItemIcon>
+              {editMode ? (
+                <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>
+                  <IconButton 
+                    size="small"
+                    onClick={() => moveItem(item.id, 'up')}
+                    sx={{ p: 0.5 }}
+                  >
+                    <ArrowUpward fontSize="small" />
+                  </IconButton>
+                  <IconButton 
+                    size="small"
+                    onClick={() => moveItem(item.id, 'down')}
+                    sx={{ p: 0.5 }}
+                  >
+                    <ArrowDownward fontSize="small" />
+                  </IconButton>
+                </Box>
+              ) : (
+                <ListItemIcon>
+                  <Checkbox
+                    edge="start"
+                    checked={item.checked}
+                    onChange={() => toggleItemCheck(item.id)}
+                  />
+                </ListItemIcon>
+              )}
               <ListItemText 
                 primary={item.name}   
               />
@@ -344,7 +437,7 @@ const StorageList = () => {
                   }
                 </Typography>
                 
-                {/* Saveon the right */}
+                {/* Save on the right */}
                 <Box>
                   {itemEditMode ? (
                     <IconButton onClick={saveEditedItem} color="primary">
@@ -361,7 +454,6 @@ const StorageList = () => {
               {/* Item details */}
               <Box sx={{ mb: 2 }}>
                 {itemEditMode ? (
-                  // Edit mode - show form fields with better layout
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Typography sx={{ width: '35%', fontWeight: 'bold' }}>Purchased Date:</Typography>
@@ -508,6 +600,40 @@ const StorageList = () => {
           )}
         </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      <Dialog
+        open={confirmDialogOpen}
+        onClose={() => setConfirmDialogOpen(false)}
+      >
+        <DialogTitle>
+          {deleteAction === 'waste' ? 'Confirm Waste' : 
+           deleteAction === 'save' ? 'Confirm Update' : 'Confirm Delete'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {deleteAction === 'checked' 
+              ? 'Are you sure you want to delete all checked items?' 
+              : deleteAction === 'waste'
+                ? 'Are you sure this item is wasted?'
+                : deleteAction === 'save'
+                  ? 'Are you sure you want to update this item?'
+                  : 'Are you sure you want to delete this item?'}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmDialogOpen(false)}>Cancel</Button>
+          <Button 
+            onClick={confirmDelete} 
+            color={deleteAction === 'waste' ? 'warning' : 
+                  deleteAction === 'save' ? 'primary' : 'error'} 
+            autoFocus
+          >
+            {deleteAction === 'waste' ? 'Confirm' : 
+             deleteAction === 'save' ? 'Update' : 'Delete'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
