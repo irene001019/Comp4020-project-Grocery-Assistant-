@@ -358,7 +358,6 @@ const ExpireList = () => {
     <ul class="list-group list-group-flush ">
         {itemList.map((item, index) => 
           <li className='list-group-item list-group-item-action' 
-              title={getExpirationText(item[2].expireDate)}
               style={{ 
                 position: 'relative',
                 transition: 'background-color 0.2s ease-in-out'

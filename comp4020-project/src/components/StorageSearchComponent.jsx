@@ -75,7 +75,7 @@ function StorageSearchComponent({ items, onItemClick }) {
                     cursor: 'pointer',
                     transition: 'background-color 0.2s ease-in-out' 
                   }}
-                  title={getExpirationText(item.expireDate)}
+                 
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e8e8e8'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
                 >
