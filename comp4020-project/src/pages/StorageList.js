@@ -4,14 +4,13 @@ import StorageSearchComponent from '../components/StorageSearchComponent';
 import {
   List, ListItem, ListItemIcon, ListItemText, 
   Checkbox, IconButton, Typography, Popover,
-  FormControlLabel, Box, Divider, Paper, TextField
+  FormControlLabel, Box, Divider, Paper, TextField, Button
 } from '@mui/material';
 import { Delete, ChevronRight, Close, Edit ,ArrowBack,Save,Cancel} from '@mui/icons-material';
 import { GiFishbone } from "react-icons/gi";
 
-
 const StorageList = () => {
-    const [items, setItems] = useState([
+  const [items, setItems] = useState([
     { id: 1, name: 'Apple', checked: true, category: 'Fruit', storageType: 'Fridge', purchaseDate: '2025-03-10', expireDate: '2025-03-20', amount: '5', calories: '52' },
     { id: 2, name: 'Chicken thigh', checked: true, category: 'Meat', storageType: 'Freezer', purchaseDate: '2025-03-08', expireDate: '2025-04-08', amount: '2', calories: '209' },
     { id: 3, name: 'Milk', checked: true, category: 'Dairy', storageType: 'Fridge', purchaseDate: '2025-03-12', expireDate: '2025-03-19', amount: '1', calories: '42' },
@@ -43,6 +42,11 @@ const StorageList = () => {
   const buttonContainerRef = useRef(null);
 
   const ButtonList = ["Filter", "Search", "Edit"];
+
+  const allCategories = ["Fruit", "Vegetable", "Meat", "Dairy", "Beverage", "Baking", "Frozen"];
+  const allStorageTypes = ["Fridge", "Freezer", "Pantry"];
+
+
 
   const handleButtonClick = (index, buttonName) => {    
     if (buttonName === 'Filter') {
@@ -148,19 +152,22 @@ const StorageList = () => {
   };
   
 
-  const categories = [...new Set(items.map(item => item.category))];
-  const storageTypes = [...new Set(items.map(item => item.storageType))];
+  const deleteCheckedItems = () => {
+    setItems(items.filter(item => !item.checked));
+  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
      
      
-      {/* Header  with Search, Filter, Edit and Popup for Search*/}
+      {/* Header */}
       <Box sx={{ textAlign: 'center', p: 2 }}>
         <Typography variant="h4" sx={{ color: 'black', mb: 2 , fontWeight: 'bold'}}>Storage</Typography>
         <div ref={buttonContainerRef}>
           <ButtonGroup items={ButtonList} onButtonClick={handleButtonClick} selectedButton={selectedButton} />
         </div>
+        
+       
 
         {/* Search Popup */}
         {showSearchPopup && (
@@ -180,7 +187,7 @@ const StorageList = () => {
       </Box>
       
 
-      {/* Filter Popover with Category and Storage Type Filters */}
+      {/* Filter Popover */}
       <Popover
         open={Boolean(filterAnchorEl)}
         anchorEl={filterAnchorEl}
@@ -206,7 +213,7 @@ const StorageList = () => {
       >
         <Paper sx={{ p: 2, width: 250, maxHeight: 400, overflow: 'auto' }}>
           <Typography variant="h6">Category</Typography>
-          {categories.map((category) => (
+          {allCategories.map((category) => (
             <FormControlLabel
               key={category}
               control={
@@ -220,7 +227,7 @@ const StorageList = () => {
           ))}
           
           <Typography variant="h6" sx={{ mt: 2 }}>Storage Type</Typography>
-          {storageTypes.map((type) => (
+          {allStorageTypes.map((type) => (
             <FormControlLabel
               key={type}
               control={
@@ -236,6 +243,17 @@ const StorageList = () => {
       </Popover>
 
       {/* Items List */}
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, py: 1 }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Items</Typography>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          onClick={deleteCheckedItems}
+          sx={{ fontSize: '0.8rem', py: 0.5 }}
+        >
+          Done
+        </Button>
+      </Box>
       <List sx={{ flexGrow: 1, overflow: 'auto' }}>
         {getFilteredItems().map((item) => (
           <React.Fragment key={item.id}>
@@ -258,6 +276,7 @@ const StorageList = () => {
                 )
               }
             >
+              
               <ListItemIcon>
                 <Checkbox
                   edge="start"
@@ -391,7 +410,7 @@ const StorageList = () => {
                           },
                         }}
                       >
-                        {categories.map((category) => (
+                        {allCategories.map((category) => (
                           <option key={category} value={category}>{category}</option>
                         ))}
                       </TextField>
@@ -411,7 +430,7 @@ const StorageList = () => {
                           },
                         }}
                       >
-                        {storageTypes.map((type) => (
+                        {allStorageTypes.map((type) => (
                           <option key={type} value={type}>{type}</option>
                         ))}
                       </TextField>
