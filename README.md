@@ -21,6 +21,8 @@ Display items by their urgency levels and highlight those that are expiring.
 Organize and manage the grocery items in storage. Monitor inventory levels regularly.
 ### Analytics Page
 A pie chart is used to analyze food waste and budget usage, with reports generated on both a monthly and weekly basis.
+## Quick start
+Visit https://hci-new-xxvo.vercel.app/
 ## Installation & Setup
 1. Clone the repository  
 ```git clone https://github.com/irene001019/Comp4020-project-Grocery-Assistant-.git```
